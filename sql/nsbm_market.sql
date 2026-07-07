@@ -231,6 +231,6 @@ CREATE TABLE `users` (
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `users` VALUES (1,'admin','admin123','2026-06-18 09:02:46');
+INSERT INTO `users` VALUES (1,'storeAdmin','Admin@123','2026-06-18 09:02:46');
 
 SET FOREIGN_KEY_CHECKS=1;
