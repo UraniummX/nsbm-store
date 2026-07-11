@@ -1,4 +1,6 @@
 <?php
+
+// Backend Logic
 session_start();
 require_once 'config/db.php';
 require_once 'includes/image_helper.php';
@@ -13,7 +15,6 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
         $v_id = $item['variant_id'];
         $qty = $item['qty'];
 
-        // Fetch product
         $stmt = $pdo->prepare("SELECT p.name, p.price, p.stock_quantity, p.image_path, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.id = ?");
         $stmt->execute([$p_id]);
         $product = $stmt->fetch();
@@ -55,8 +56,8 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
 
     <?php if (empty($cart_items)): ?>
         <div style="text-align: center; padding: 60px 0;">
-            <p style="color: #666; margin-bottom: 20px;">Your bag is empty.</p>
-            <a href="index.php" style="color: #000; text-decoration: underline; font-weight: bold;">CONTINUE SHOPPING</a>
+            <p style="color: var(--text-grey); margin-bottom: 20px;">Your bag is empty.</p>
+            <a href="index.php" class="btn" style="background: var(--bg-track); color: var(--text-black);">CONTINUE SHOPPING</a>
         </div>
     <?php else: ?>
         <div style="display: flex; gap: 60px; align-items: flex-start; flex-wrap: wrap;">
@@ -102,15 +103,15 @@ if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
                 </table>
             </div>
             
-            <div style="flex: 1; background: #fff; padding: 40px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.02); min-width: 300px;">
-                <h2 style="margin-top: 0; text-transform: uppercase; font-size: 1.2rem; letter-spacing: 1px; border-bottom: 2px solid #eee; padding-bottom: 15px;">Summary</h2>
+            <div style="flex: 1; background: var(--bg-white); padding: 40px; border-radius: 16px; border: 1px solid var(--border-grey); box-shadow: 0 10px 30px rgba(0,0,0,0.05); min-width: 300px;">
+                <h2 style="margin-top: 0; text-transform: uppercase; font-size: 1.2rem; letter-spacing: 1px; border-bottom: 2px solid var(--border-grey); padding-bottom: 15px;">Summary</h2>
                 <div style="display: flex; justify-content: space-between; margin: 30px 0; font-weight: 900; font-size: 1.3rem; color: var(--nsbm-green);">
                     <span style="text-transform: uppercase; color: var(--text-black);">Total</span>
                     <span>LKR <?php echo number_format($total, 2); ?></span>
                 </div>
-                <p style="font-size: 0.85rem; color: #888; margin-bottom: 30px;">Shipping and taxes calculated at checkout.</p>
+                <p style="font-size: 0.85rem; color: var(--text-grey); margin-bottom: 30px;">Shipping and taxes calculated at checkout.</p>
                 <a href="checkout.php" style="display: block; background: var(--nsbm-green); color: #fff; text-align: center; padding: 18px; border-radius: 10px; text-decoration: none; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; transition: 0.2s;">Checkout</a>
-                <a href="index.php" style="display: block; text-align: center; margin-top: 20px; color: #666; text-decoration: none; font-size: 0.8rem; font-weight: bold; text-transform: uppercase;">Continue Shopping</a>
+                <a href="index.php" class="btn" style="display: block; text-align: center; margin-top: 20px; background: var(--bg-track); color: var(--text-black);">CONTINUE SHOPPING</a>
             </div>
         </div>
     <?php endif; ?>

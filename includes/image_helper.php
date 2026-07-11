@@ -1,4 +1,6 @@
 <?php
+
+// Backend Logic
 function getProductImage($name, $category_name = '', $image_path = null) {
     $images = getProductImages($name, $category_name, $image_path);
     return !empty($images) ? $images[0] : 'assets/images/products/hoodie.jpg';
@@ -8,7 +10,6 @@ function getProductImages($name, $category_name = '', $image_path = null, $galle
     $images = [];
     $base = 'assets/images/products/';
 
-    // Admin-uploaded local file (relative path)
     if (!empty($image_path) && !str_starts_with($image_path, 'http')) {
         if (file_exists(__DIR__ . '/../' . $image_path)) {
             $images[] = $image_path;
@@ -23,12 +24,10 @@ function getProductImages($name, $category_name = '', $image_path = null, $galle
         if (!empty($images)) return $images;
     }
 
-    // External URL stored in DB (legacy / admin-entered URL)
     if (!empty($image_path) && str_starts_with($image_path, 'http')) {
         return [$image_path];
     }
 
-    // Gallery images only
     if (!empty($gallery_paths)) {
         foreach ((array) json_decode($gallery_paths, true) as $gp) {
             if (!empty($gp) && file_exists(__DIR__ . '/../' . $gp)) {
@@ -38,7 +37,6 @@ function getProductImages($name, $category_name = '', $image_path = null, $galle
         if (!empty($images)) return $images;
     }
 
-    // Named product overrides (multi-angle images)
     $nameLower = strtolower($name);
     if (str_contains($nameLower, 'nsbm hoodie')) {
         return [$base.'hoodie_front.png', $base.'hoodie_back.png', $base.'hoodie_side.png', $base.'hoodie_folded.png'];
@@ -50,7 +48,6 @@ function getProductImages($name, $category_name = '', $image_path = null, $galle
     if (str_contains($nameLower, 'wireless mouse') || str_contains($nameLower, 'gaming mouse')) return [$base.'mouse_top.jpg'];
     if (str_contains($nameLower, 'notebook'))      return [$base.'notebook_closed.jpg'];
 
-    // Category fallback — all local images
     $catLower = strtolower($category_name);
     $fallbacks = [
         'apparel'     => $base.'hoodie.jpg',

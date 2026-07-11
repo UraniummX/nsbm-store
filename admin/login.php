@@ -1,4 +1,6 @@
 <?php
+
+// Backend Logic
 session_start();
 require_once '../config/db.php';
 
@@ -15,15 +17,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($stmt->execute()) {
                 if ($stmt->rowCount() == 1) {
                     if ($row = $stmt->fetch()) {
-                        if ($password === $row['password']) {
+                        if (password_verify($password, $row['password'])) {
                             if (session_status() === PHP_SESSION_NONE) {
                                 session_start();
                             }
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $row['id'];
                             $_SESSION["username"] = $row['username'];
-                            
-                            // Redirect based on user role
+
                             if ($row['username'] === 'admin') {
                                 header("location: dashboard.php");
                             } else {
@@ -38,6 +39,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
+<?php // View Output ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

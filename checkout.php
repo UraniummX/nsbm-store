@@ -1,4 +1,6 @@
 <?php
+
+// Backend Logic
 session_start();
 require_once 'config/db.php';
 include 'includes/header.php';
@@ -20,8 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         try {
             $pdo->beginTransaction();
-            
-            // Calculate total
+
             $total = 0;
             $items_to_insert = [];
             
@@ -52,21 +53,62 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'price' => $price
                 ];
             }
-            
-            // Insert order
+
             $oStmt = $pdo->prepare("INSERT INTO orders (customer_name, customer_email, total_amount) VALUES (?, ?, ?)");
             $oStmt->execute([$name, $email, $total]);
             $order_id = $pdo->lastInsertId();
-            
-            // Insert order items
+
             $iStmt = $pdo->prepare("INSERT INTO order_items (order_id, product_id, variant_id, quantity, price) VALUES (?, ?, ?, ?, ?)");
+            $pStockStmt = $pdo->prepare("UPDATE products SET stock_quantity = GREATEST(0, stock_quantity - ?) WHERE id = ?");
+            $vStockStmt = $pdo->prepare("UPDATE product_variants SET stock_quantity = GREATEST(0, stock_quantity - ?) WHERE id = ?");
+            
             foreach ($items_to_insert as $i) {
                 $iStmt->execute([$order_id, $i['p_id'], $i['v_id'], $i['qty'], $i['price']]);
+
+                $pStockStmt->execute([$i['qty'], $i['p_id']]);
+
+                if (!empty($i['v_id']) && $i['v_id'] != 0) {
+                    $vStockStmt->execute([$i['qty'], $i['v_id']]);
+                }
             }
             
             $pdo->commit();
             $_SESSION['cart'] = [];
             $success = true;
+
+            $subject = "Order Confirmation - NSBM Store";
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+            $headers .= "From: no-reply@nsbmstore.com" . "\r\n";
+
+            $mail_body = "
+            <html>
+            <head>
+                <title>Order Confirmation</title>
+            </head>
+            <body style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>
+                <div style='max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>
+                    <h2 style='color: #388E3C; text-align: center;'>Thank you for your order!</h2>
+                    <p>Dear {$name},</p>
+                    <p>Your order (<strong>ID: #{$order_id}</strong>) has been successfully placed. We are currently processing it.</p>
+                    <table style='width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px;'>
+                        <tr style='background-color: #f5f5f5;'>
+                            <th style='padding: 10px; text-align: left; border-bottom: 2px solid #ddd;'>Summary</th>
+                            <th style='padding: 10px; text-align: right; border-bottom: 2px solid #ddd;'>Amount</th>
+                        </tr>
+                        <tr>
+                            <td style='padding: 10px; border-bottom: 1px solid #ddd;'>Total Paid</td>
+                            <td style='padding: 10px; text-align: right; border-bottom: 1px solid #ddd; font-weight: bold;'>LKR " . number_format($total, 2) . "</td>
+                        </tr>
+                    </table>
+                    <p>We will notify you once your order is ready for pickup or delivery.</p>
+                    <p>Best Regards,<br><strong>NSBM Store Team</strong></p>
+                </div>
+            </body>
+            </html>
+            ";
+            
+            @mail($email, $subject, $mail_body, $headers);
             
         } catch (Exception $e) {
             $pdo->rollBack();

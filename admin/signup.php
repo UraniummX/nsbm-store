@@ -1,4 +1,6 @@
 <?php
+
+// Backend Logic
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -12,23 +14,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    // Check if username/email already exists
     $stmt = $pdo->prepare("SELECT id FROM users WHERE username = :email");
     $stmt->execute(['email' => $email]);
     
     if ($stmt->rowCount() > 0) {
         $error = "An account with this email already exists.";
     } else {
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (:email, :password)");
-        if ($stmt->execute(['email' => $email, 'password' => $password])) {
+        if ($stmt->execute(['email' => $email, 'password' => $hashed_password])) {
             $new_user_id = $pdo->lastInsertId();
-            
-            // Auto login the newly registered user
+
             $_SESSION["loggedin"] = true;
             $_SESSION["id"] = $new_user_id;
             $_SESSION["username"] = $email;
-            
-            // Redirect directly to the marketplace storefront
+
             header("location: ../index.php");
             exit;
         } else {
@@ -37,6 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
+<?php // View Output ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

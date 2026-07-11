@@ -1,4 +1,6 @@
 <?php
+
+// Backend Logic
 session_start();
 require_once 'config/db.php';
 include 'includes/header.php';
@@ -18,7 +20,6 @@ if (!$product) {
     exit;
 }
 
-// Fetch variants
 $vStmt = $pdo->prepare("SELECT * FROM product_variants WHERE product_id = :id");
 $vStmt->execute(['id' => $id]);
 $variants = $vStmt->fetchAll();
@@ -53,7 +54,6 @@ $product_status = $product['status'] ?? 'active';
         </div>
         <?php endif; ?>
 
-        
         <div class="main-image-column" id="img-zoom-container">
             <img src="<?php echo $main_img; ?>" alt="<?php echo $name; ?>" id="main-display-img">
             
@@ -64,7 +64,6 @@ $product_status = $product['status'] ?? 'active';
             </div>
         </div>
 
-        
         <div class="info-column">
             <p class="cat-label"><?php echo $cat; ?></p>
             <h1 class="prod-title"><?php echo $name; ?></h1>

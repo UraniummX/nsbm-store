@@ -1,4 +1,6 @@
 <?php
+
+// Backend Logic
 session_start();
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: login.php");
@@ -7,10 +9,11 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 require_once '../config/db.php';
 
-// Fetch products
 $sql = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id ORDER BY p.created_at DESC";
 $products = $pdo->query($sql)->fetchAll();
 ?>
+
+<?php // View Output ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

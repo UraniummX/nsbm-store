@@ -1,4 +1,6 @@
 <?php
+
+// Backend Logic
 session_start();
 require_once 'config/db.php';
 
@@ -12,7 +14,6 @@ $variant_id = isset($_POST['variant_id']) ? $_POST['variant_id'] : '0';
 $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
 $is_ajax = isset($_POST['ajax']) ? true : false;
 
-// Create a unique cart item key
 $cart_key = $product_id . '-' . $variant_id;
 
 if ($action == 'add' && $product_id) {
@@ -36,7 +37,7 @@ if ($action == 'clear') {
 }
 
 if ($is_ajax) {
-    // Count total items in cart
+    
     $cart_count = 0;
     foreach ($_SESSION['cart'] as $item) {
         $cart_count += $item['qty'];

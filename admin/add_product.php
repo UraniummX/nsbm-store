@@ -1,4 +1,6 @@
 <?php
+
+// Backend Logic
 session_start();
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: login.php");
@@ -33,9 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $saved_path = 'assets/images/products/' . $filename;
                     
                     if ($i === 0) {
-                        $image_path = $saved_path; // First image is main
+                        $image_path = $saved_path; 
                     } else {
-                        $gallery_paths[] = $saved_path; // Rest are gallery
+                        $gallery_paths[] = $saved_path; 
                     }
                 }
             }
@@ -66,6 +68,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
+<?php // View Output ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -153,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="hidden" name="category_id" id="category_id" value="" required>
                 <div class="category-tiles">
                     <?php 
-                    // Map some icons for visual flair based on common names
+                    
                     $icons = [
                         'Apparel' => 'fa-shirt',
                         'Stationery' => 'fa-pen-ruler',

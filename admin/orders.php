@@ -1,4 +1,6 @@
 <?php
+
+// Backend Logic
 session_start();
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: login.php");
@@ -7,10 +9,11 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
 require_once '../config/db.php';
 
-// Fetch orders
 $sql = "SELECT * FROM orders ORDER BY created_at DESC";
 $orders = $pdo->query($sql)->fetchAll();
 ?>
+
+<?php // View Output ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

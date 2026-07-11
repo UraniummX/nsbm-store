@@ -1,4 +1,6 @@
 <?php
+
+// Backend Logic
 session_start();
 require_once 'config/db.php';
 require_once 'includes/image_helper.php';
@@ -6,14 +8,12 @@ include 'includes/header.php';
 
 $categories = $pdo->query("SELECT * FROM categories")->fetchAll();
 
-// Mock Top Sellers
 $stmt = $pdo->query("SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id LIMIT 5");
 $top_sellers = $stmt->fetchAll();
 
 $min_price = isset($_GET['min_price']) && is_numeric($_GET['min_price']) ? (float)$_GET['min_price'] : 0;
 $max_price = isset($_GET['max_price']) && is_numeric($_GET['max_price']) ? (float)$_GET['max_price'] : 20000;
 ?>
-
 
 <div class="mobile-action-bar">
     <button class="mobile-action-btn" id="mobile-filter-toggle">
@@ -25,8 +25,7 @@ $max_price = isset($_GET['max_price']) && is_numeric($_GET['max_price']) ? (floa
 </div>
 
 <div class="store-layout">
-    
-    
+
     <div class="sidebar-left-trigger"></div>
     <aside class="sidebar-left">
         <div class="sidebar-close-btn">
@@ -101,7 +100,6 @@ $max_price = isset($_GET['max_price']) && is_numeric($_GET['max_price']) ? (floa
         </form>
     </aside>
 
-    
     <main class="products-section">
         <h1 class="section-title">All Products</h1>
         <div class="product-grid" id="product-grid">
@@ -110,7 +108,6 @@ $max_price = isset($_GET['max_price']) && is_numeric($_GET['max_price']) ? (floa
         </div>
     </main>
 
-    
     <div class="sidebar-right-trigger"></div>
     <aside class="sidebar-right">
         <div class="sidebar-close-btn">
@@ -138,7 +135,6 @@ $max_price = isset($_GET['max_price']) && is_numeric($_GET['max_price']) ? (floa
 </div>
 
 <div id="toast" class="toast">Added to cart!</div>
-
 
 <div class="modal-overlay" id="quick-view-modal">
     <div class="modal-content">

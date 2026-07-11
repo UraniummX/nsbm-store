@@ -1,13 +1,17 @@
 <?php
+
+// Backend Logic
 session_start();
 
 $success = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // This is just a mock for visual purposes
+    
     $success = "If an account exists with this email, a reset code has been sent.";
 }
 ?>
+
+<?php // View Output ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

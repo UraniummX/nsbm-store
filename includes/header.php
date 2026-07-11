@@ -1,4 +1,6 @@
 <?php
+
+// Backend Logic
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -9,16 +11,17 @@ if(isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
     }
 }
 
-// Categories nav
 $header_categories = [];
 if (isset($pdo)) {
     try {
         $header_categories = $pdo->query("SELECT * FROM categories ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
-        // silently fail if db not initialized
+        
     }
 }
 ?>
+
+<?php // View Output ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,10 +96,8 @@ if (isset($pdo)) {
         </div>
     </header>
 
-    
     <div class="drawer-overlay" id="drawer-overlay"></div>
 
-    
     <div class="settings-drawer" id="settings-drawer">
         <div class="settings-header">
             <h2>Settings</h2>
@@ -143,5 +144,4 @@ if (isset($pdo)) {
             </div>
         </div>
     </div>
-
 
