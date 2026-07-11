@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["id"] = $row['id'];
                             $_SESSION["username"] = $row['username'];
 
-                            if ($row['username'] === 'admin') {
+                            if ($row['username'] === 'storeAdmin') {
                                 header("location: dashboard.php");
                             } else {
                                 header("location: ../index.php");
