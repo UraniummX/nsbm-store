@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Login - NSBM Store</title>
     <link rel="icon" type="image/png" href="../assets/images/favicon.png?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css?v=<?= time() ?>">
 </head>
 <body>
     <div class="auth-wrapper">
