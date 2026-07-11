@@ -231,6 +231,6 @@ CREATE TABLE `users` (
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `users` VALUES (1,'storeAdmin','$2y$10$HHSGaHs3LC1EZDntMIGUi.W/fsfmwqAmpbn8UBp8MuURxAtD3Ci6S','2026-06-18 09:02:46');
+INSERT INTO `users` VALUES (1,'storeAdmin','$2y$10$HbKwHo6WUep7lFhK76K4hOw59xq1BIdxmh5qMh3/IXKsOKig38om2','2026-06-18 09:02:46');
 
 SET FOREIGN_KEY_CHECKS=1;
